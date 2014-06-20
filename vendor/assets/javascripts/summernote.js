@@ -18,7 +18,7 @@
     factory(window.jQuery, window.CodeMirror);
   }
 }(function ($, CodeMirror) {
-  
+
 
 
   // Array.prototype.reduce fallback
@@ -102,7 +102,7 @@
     var last = function (array) { return array[array.length - 1]; };
     var initial = function (array) { return array.slice(0, array.length - 1); };
     var tail = function (array) { return array.slice(1); };
-  
+
     /**
      * get sum from a list
      * @param {array} array - array
@@ -114,7 +114,7 @@
         return memo + fn(v);
       }, 0);
     };
-  
+
     /**
      * returns a copy of the collection with array type.
      * @param {collection} collection - collection eg) node.childNodes, ...
@@ -126,7 +126,7 @@
       }
       return result;
     };
-  
+
     /**
      * cluster item by second function
      * @param {array} array - array
@@ -145,7 +145,7 @@
         return memo;
       }, [[head(array)]]);
     };
-  
+
     /**
      * returns a copy of the array with all falsy values removed
      * @param {array} array - array
@@ -158,7 +158,7 @@
       }
       return aResult;
     };
-  
+
     return { head: head, last: last, initial: initial, tail: tail,
              sum: sum, from: from, compact: compact, clusterBy: clusterBy };
   })();
@@ -176,26 +176,26 @@
         return node && node.nodeName === sNodeName;
       };
     };
-  
+
     var isPara = function (node) {
       // Chrome(v31.0), FF(v25.0.1) use DIV for paragraph
       return node && /^DIV|^P|^LI|^H[1-7]/.test(node.nodeName);
     };
-  
+
     var emptyPara = '<p><br/></p>';
-  
+
     var isList = function (node) {
       return node && /^UL|^OL/.test(node.nodeName);
     };
-  
+
     var isEditable = function (node) {
       return node && $(node).hasClass('note-editable');
     };
-  
+
     var isControlSizing = function (node) {
       return node && $(node).hasClass('note-control-sizing');
     };
-  
+
     /**
      * find nearest ancestor predicate hit
      * @param {element} node
@@ -208,7 +208,7 @@
       }
       return null;
     };
-  
+
     /**
      * returns new array of ancestor nodes (until predicate hit).
      * @param {element} node
@@ -216,7 +216,7 @@
      */
     var listAncestor = function (node, pred) {
       pred = pred || func.fail;
-  
+
       var aAncestor = [];
       ancestor(node, function (el) {
         aAncestor.push(el);
@@ -224,7 +224,7 @@
       });
       return aAncestor;
     };
-  
+
     /**
      * returns common ancestor node between two nodes.
      * @param {element} nodeA
@@ -237,7 +237,7 @@
       }
       return null; // difference document area
     };
-  
+
     /**
      * listing all Nodes between two nodes.
      * FIXME: nodeA and nodeB must be sorted, use comparePoints later.
@@ -246,23 +246,23 @@
      */
     var listBetween = function (nodeA, nodeB) {
       var aNode = [];
-  
+
       var bStart = false, bEnd = false;
       var fnWalk = function (node) {
         if (!node) { return; } // traverse fisnish
         if (node === nodeA) { bStart = true; } // start point
         if (bStart && !bEnd) { aNode.push(node); } // between
         if (node === nodeB) { bEnd = true; return; } // end point
-  
+
         for (var idx = 0, sz = node.childNodes.length; idx < sz; idx++) {
           fnWalk(node.childNodes[idx]);
         }
       };
-  
+
       fnWalk(commonAncestor(nodeA, nodeB)); // DFS with commonAcestor.
       return aNode;
     };
-  
+
     /**
      * listing all prevSiblings (until predicate hit).
      * @param {element} node
@@ -270,7 +270,7 @@
      */
     var listPrev = function (node, pred) {
       pred = pred || func.fail;
-  
+
       var aNext = [];
       while (node) {
         aNext.push(node);
@@ -279,7 +279,7 @@
       }
       return aNext;
     };
-  
+
     /**
      * listing nextSiblings (until predicate hit).
      * @param {element} node
@@ -287,7 +287,7 @@
      */
     var listNext = function (node, pred) {
       pred = pred || func.fail;
-  
+
       var aNext = [];
       while (node) {
         aNext.push(node);
@@ -296,7 +296,7 @@
       }
       return aNext;
     };
-  
+
     /**
      * insert node after preceding
      * @param {element} node
@@ -311,7 +311,7 @@
       }
       return node;
     };
-  
+
     /**
      * append children
      * @param {element} node
@@ -323,9 +323,9 @@
       });
       return node;
     };
-  
+
     var isText = makePredByNodeName('#text');
-  
+
     /**
      * returns #text's text size or element's childNodes size
      * @param {element} node
@@ -334,7 +334,7 @@
       if (isText(node)) { return node.nodeValue.length; }
       return node.childNodes.length;
     };
-  
+
     /**
      * returns offset from parent.
      * @param {element} node
@@ -344,7 +344,7 @@
       while ((node = node.previousSibling)) { offset += 1; }
       return offset;
     };
-  
+
     /**
      * return offsetPath(array of offset) from ancestor
      * @param {element} ancestor - ancestor node
@@ -354,7 +354,7 @@
       var aAncestor = list.initial(listAncestor(node, func.eq(ancestor)));
       return $.map(aAncestor, position).reverse();
     };
-  
+
     /**
      * return element from offsetPath(array of offset)
      * @param {element} ancestor - ancestor node
@@ -367,7 +367,7 @@
       }
       return current;
     };
-  
+
     /**
      * split element or #text
      * @param {element} node
@@ -376,16 +376,16 @@
     var splitData = function (node, offset) {
       if (offset === 0) { return node; }
       if (offset >= length(node)) { return node.nextSibling; }
-  
+
       // splitText
       if (isText(node)) { return node.splitText(offset); }
-  
+
       // splitElement
       var child = node.childNodes[offset];
       node = insertAfter(node.cloneNode(false), node);
       return appends(node, listNext(child));
     };
-  
+
     /**
      * split dom tree by boundaryPoint(pivot and offset)
      * @param {element} root
@@ -405,7 +405,7 @@
         return clone;
       });
     };
-  
+
     /**
      * remove node, (bRemoveChild: remove child or not)
      * @param {element} node
@@ -414,7 +414,7 @@
     var remove = function (node, bRemoveChild) {
       if (!node || !node.parentNode) { return; }
       if (node.removeNode) { return node.removeNode(bRemoveChild); }
-  
+
       var elParent = node.parentNode;
       if (!bRemoveChild) {
         var aNode = [];
@@ -422,19 +422,19 @@
         for (i = 0, sz = node.childNodes.length; i < sz; i++) {
           aNode.push(node.childNodes[i]);
         }
-  
+
         for (i = 0, sz = aNode.length; i < sz; i++) {
           elParent.insertBefore(aNode[i], node);
         }
       }
-  
+
       elParent.removeChild(node);
     };
-  
+
     var html = function ($node) {
       return dom.isTextarea($node[0]) ? $node.val() : $node.html();
     };
-  
+
     return {
       emptyPara: emptyPara,
       isText: isText,
@@ -472,11 +472,11 @@
    */
   var range = (function () {
     var bW3CRangeSupport = !!document.createRange;
-  
+
     // return boundaryPoint from TextRange, inspired by Andy Na's HuskyRange.js
     var textRange2bp = function (textRange, bStart) {
       var elCont = textRange.parentElement(), nOffset;
-  
+
       var tester = document.body.createTextRange(), elPrevCont;
       var aChild = list.from(elCont.childNodes);
       for (nOffset = 0; nOffset < aChild.length; nOffset++) {
@@ -485,44 +485,44 @@
         if (tester.compareEndPoints('StartToStart', textRange) >= 0) { break; }
         elPrevCont = aChild[nOffset];
       }
-  
+
       if (nOffset !== 0 && dom.isText(aChild[nOffset - 1])) {
         var textRangeStart = document.body.createTextRange(), elCurText = null;
         textRangeStart.moveToElementText(elPrevCont || elCont);
         textRangeStart.collapse(!elPrevCont);
         elCurText = elPrevCont ? elPrevCont.nextSibling : elCont.firstChild;
-  
+
         var pointTester = textRange.duplicate();
         pointTester.setEndPoint('StartToStart', textRangeStart);
         var nTextCount = pointTester.text.replace(/[\r\n]/g, '').length;
-  
+
         while (nTextCount > elCurText.nodeValue.length && elCurText.nextSibling) {
           nTextCount -= elCurText.nodeValue.length;
           elCurText = elCurText.nextSibling;
         }
-  
+
         /* jshint ignore:start */
         var sDummy = elCurText.nodeValue; //enforce IE to re-reference elCurText, hack
         /* jshint ignore:end */
-  
+
         if (bStart && elCurText.nextSibling && dom.isText(elCurText.nextSibling) &&
             nTextCount === elCurText.nodeValue.length) {
           nTextCount -= elCurText.nodeValue.length;
           elCurText = elCurText.nextSibling;
         }
-  
+
         elCont = elCurText;
         nOffset = nTextCount;
       }
-  
+
       return {cont: elCont, offset: nOffset};
     };
-  
+
     // return TextRange from boundary point (inspired by google closure-library)
     var bp2textRange = function (bp) {
       var textRangeInfo = function (elCont, nOffset) {
         var elNode, bCollapseToStart;
-  
+
         if (dom.isText(elCont)) {
           var aPrevText = dom.listPrev(elCont, func.not(dom.isText));
           var elPrevCont = list.last(aPrevText).previousSibling;
@@ -534,30 +534,30 @@
           if (dom.isText(elNode)) {
             return textRangeInfo(elNode, nOffset);
           }
-  
+
           nOffset = 0;
           bCollapseToStart = false;
         }
-  
+
         return {cont: elNode, collapseToStart: bCollapseToStart, offset: nOffset};
       };
-  
+
       var textRange = document.body.createTextRange();
       var info = textRangeInfo(bp.cont, bp.offset);
-  
+
       textRange.moveToElementText(info.cont);
       textRange.collapse(info.collapseToStart);
       textRange.moveStart('character', info.offset);
       return textRange;
     };
-  
+
     // {startContainer, startOffset, endContainer, endOffset}
     var WrappedRange = function (sc, so, ec, eo) {
       this.sc = sc;
       this.so = so;
       this.ec = ec;
       this.eo = eo;
-  
+
       // nativeRange: get nativeRange from sc, so, ec, eo
       var nativeRange = function () {
         if (bW3CRangeSupport) {
@@ -571,7 +571,7 @@
           return textRange;
         }
       };
-  
+
       // select: update visible range
       this.select = function () {
         var nativeRng = nativeRange();
@@ -583,7 +583,7 @@
           nativeRng.select();
         }
       };
-  
+
       // listPara: listing paragraphs on range
       this.listPara = function () {
         var aNode = dom.listBetween(sc, ec);
@@ -592,7 +592,7 @@
         }));
         return $.map(list.clusterBy(aPara, func.eq2), list.head);
       };
-  
+
       // makeIsOn: return isOn(pred) function
       var makeIsOn = function (pred) {
         return function () {
@@ -600,7 +600,7 @@
           return elAncestor && (elAncestor === dom.ancestor(ec, pred));
         };
       };
-  
+
       // isOnEditable: judge whether range is on editable or not
       this.isOnEditable = makeIsOn(dom.isEditable);
       // isOnList: judge whether range is on list node or not
@@ -609,7 +609,7 @@
       this.isOnAnchor = makeIsOn(dom.isAnchor);
       // isCollapsed: judge whether range was collapsed
       this.isCollapsed = function () { return sc === ec && so === eo; };
-  
+
       // insertNode
       this.insertNode = function (node) {
         var nativeRng = nativeRange();
@@ -619,12 +619,12 @@
           nativeRng.pasteHTML(node.outerHTML); // NOTE: missing node reference.
         }
       };
-  
+
       this.toString = function () {
         var nativeRng = nativeRange();
         return bW3CRangeSupport ? nativeRng.toString() : nativeRng.text;
       };
-  
+
       //bookmark: offsetPath bookmark
       this.bookmark = function (elEditable) {
         return {
@@ -633,7 +633,7 @@
         };
       };
     };
-  
+
     return { // Range Object
       // create Range Object From arguments or Browser Selection
       create : function (sc, so, ec, eo) {
@@ -641,7 +641,7 @@
           if (bW3CRangeSupport) { // webkit, firefox
             var selection = document.getSelection();
             if (selection.rangeCount === 0) { return null; }
-  
+
             var nativeRng = selection.getRangeAt(0);
             sc = nativeRng.startContainer;
             so = nativeRng.startOffset;
@@ -653,10 +653,10 @@
             textRangeEnd.collapse(false);
             var textRangeStart = textRange;
             textRangeStart.collapse(true);
-  
+
             var bpStart = textRange2bp(textRangeStart, true),
             bpEnd = textRange2bp(textRangeEnd, false);
-  
+
             sc = bpStart.cont;
             so = bpStart.offset;
             ec = bpEnd.cont;
@@ -695,7 +695,7 @@
         reader.readAsDataURL(file);
       }).promise();
     };
-  
+
     /**
      * loadImage from url string
      * @param {string} sUrl
@@ -723,7 +723,7 @@
         }
       }).promise();
     };
-  
+
     return { readFile: readFile, loadImage: loadImage };
   })();
 
@@ -1271,17 +1271,20 @@
           $imageBtn = $dialog.find('.note-image-btn');
 
       $imageDialog.on('shown.bs.modal', function () {
-        $imageInput.on('change', function () {
-          fnInsertImages(this.files);
-          $(this).val('');
-          $imageDialog.modal('hide');
-        });
-        $imageUrl.val('').keyup(function () {
-          toggleBtn($imageBtn, $imageUrl.val());
-        }).trigger('focus');
+        toggleImageBtn = function(){
+          toggleBtn($imageBtn, ($imageInput.files.length+$imageUrl.val().length>0));
+        };
+        $imageUrl.val('').keyup(toggleImageBtn).trigger('focus');
+        $imageInput.val('').change(toggleImageBtn);
         $imageBtn.click(function (event) {
           $imageDialog.modal('hide');
-          fnInsertImage($imageUrl.val());
+
+          if (imageInput.files.length > 0) {
+            fnInsertImages($imageInput.files);
+            $imageInput.val('');
+          } else {
+            fnInsertImage($imageUrl.val());
+          }
           event.preventDefault();
         });
       }).on('hidden.bs.modal', function () {

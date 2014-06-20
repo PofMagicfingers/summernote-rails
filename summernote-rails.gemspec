@@ -6,11 +6,11 @@ require 'summernote/rails/version'
 Gem::Specification.new do |spec|
   spec.name          = "summernote-rails"
   spec.version       = Summernote::Rails::VERSION
-  spec.authors       = ["Hyo Seong Choi"]
-  spec.email         = ["rorlab@gmail.com"]
+  spec.authors       = ["Pof Magicfingers","Hyo Seong Choi"]
+  spec.email         = ["pof@pof.pm", "rorlab@gmail.com"]
   spec.description   = %q{Super Simple WYSIWYG Editor on Bootstrap}
-  spec.summary       = %q{Gemify Summernote for Ruby on Rails}
-  spec.homepage      = "http://rorlab.github.io/summernote-rails/"
+  spec.summary       = %q{Gemify Summernote for podcloud}
+  spec.homepage      = "http://podcloud.fr/"
   spec.license       = "MIT"
 
   # spec.files         = `git ls-files`.split($/)
