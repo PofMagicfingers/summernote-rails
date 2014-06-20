@@ -1279,7 +1279,7 @@
         $imageBtn.click(function (event) {
           $imageDialog.modal('hide');
 
-          if (imageInput.files.length > 0) {
+          if ($imageInput.files.length > 0) {
             fnInsertImages($imageInput.get(0).files);
             $imageInput.val('');
           } else {
