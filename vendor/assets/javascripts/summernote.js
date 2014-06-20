@@ -1272,7 +1272,7 @@
 
       $imageDialog.on('shown.bs.modal', function () {
         toggleImageBtn = function(){
-          toggleBtn($imageBtn, ($imageInput.files.length+$imageUrl.val().length>0));
+          toggleBtn($imageBtn, ($imageInput.get(0).files.length+$imageUrl.val().length>0));
         };
         $imageUrl.val('').keyup(toggleImageBtn).trigger('focus');
         $imageInput.val('').change(toggleImageBtn);
@@ -1280,7 +1280,7 @@
           $imageDialog.modal('hide');
 
           if (imageInput.files.length > 0) {
-            fnInsertImages($imageInput.files);
+            fnInsertImages($imageInput.get(0).files);
             $imageInput.val('');
           } else {
             fnInsertImage($imageUrl.val());
